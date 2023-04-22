@@ -1,0 +1,28 @@
+[
+    {
+      "title": "remeras",
+      "price": "150",
+      "code": "0045",
+      "stock": "233",
+      "category": "prendas",
+      "description": "remera roja",
+      "status": true,
+      "thumbnail": [
+        "C:\\Users\\lucas\\OneDrive\\Escritorio\\desafio4\\src\\public\\uploads\\1682126179403-remeras_3.jpg"
+      ],
+      "id": 1
+    },
+    {
+      "title": "remera negra",
+      "price": "4000",
+      "code": "002",
+      "stock": "200",
+      "category": "prendas",
+      "description": "remera negra",
+      "status": false,
+      "thumbnail": [
+        "C:\\Users\\lucas\\OneDrive\\Escritorio\\desafio4\\src\\public\\uploads\\1682126300092-remera-negro-amarillo.jpg"
+      ],
+      "id": 2
+    }
+  ]
