@@ -1,37 +1,35 @@
 const fs = require('fs')
 
 class CartManager {
-    constructor(archivo) {
-        this.archivo = archivo;
+    constructor(file) {
+        this.file = file;
     }
 
-    exists(archivo) {
-        /* verifico si existe el archivo */
+    exists(file) {
         try {
-            if (!fs.existsSync(archivo)) {
-                throw new Error("The file does not exists");
+            if (!fs.existsSync(file)) {
+                throw new Error("El archivo no existe");
             } else {
                 return true;
             }
         } catch (error) {
-            console.log(`Error looking for the file: ${error.message}`);
+            console.log(`Error al buscar el archivo: ${error.message}`);
         }
     }
 
-    readFile = async (archivo) => {
+    readFile = async (file) => {
         try {
-            /* leo el archivo */
-            const data = await fs.promises.readFile(archivo);
+            const data = await fs.promises.readFile(file);
             return JSON.parse(data);
         } catch (error) {
-            console.log(`Error reading the file: ${error.message}`)
+            console.log(`Error al leer el archivo: ${error.message}`)
         }
     }
 
     writeFile = async data => {
         try {
             await fs.promises.writeFile(
-                this.archivo, JSON.stringify(data, null, 2)
+                this.file, JSON.stringify(data, null, 2)
                 )
             }catch(err) {
             console.log(err);
@@ -40,9 +38,7 @@ class CartManager {
 
     createCart = async () => {
         try {
-        /* busco si el archivo no existe o si existe, si tiene datos*/
-            if (!this.exists(this.archivo)) {
-                /* Si el archivo no existe, lo creo con el primer carrito agregado */
+            if (!this.exists(this.file)) {
                 let cartsArray = []
                 const cart = {
                     id: this.#idGen(),
@@ -50,47 +46,42 @@ class CartManager {
                 };
                 cartsArray.push(cart)
                 await this.writeFile(cartsArray)
-                console.log(`The cart was added with the id: ${cart.id}`)
+                console.log(`El carrito fue agregado con la id: ${cart.id}`)
                 return cart.id
             } else {
-                /* si el archivo existe, primero verifico si esta vacio */
-                if (this.readFile(this.archivo)) {
-                const cartsArray = await this.readFile(this.archivo)
-                // const cartsArray = await this.getProducts()
+                if (this.readFile(this.file)) {
+                const cartsArray = await this.readFile(this.file)
                 if (cartsArray.length === 0 || !cartsArray) {
-                    /* si esta vacio no le paso parametro al idGenerator, por lo que le pondra id: 1 */
                     const cart = {
                         id: this.#idGen(),
                         products: [],
                     };
                     cartsArray.push(cart);
                 } else {
-                    /* si ya tiene algun producto, le paso el array de productos como parametro al idGenerator para que le ponga el id correspondiente */
                     const cart = {
                         id: this.#idGen(cartsArray),
                         products: [],
                     };
                     cartsArray.push(cart);
                 }
-                /* escribo el producto */
                 await this.writeFile(cartsArray);
-                console.log(`The cart was added with the id: ${cart.id}`);
+                console.log(`El carrito fue agregado con la id: ${cart.id}`);
                 return carts;
             }
         }
         } catch (error) {
-        console.log(`Error adding product: ${error.message}`);
+        console.log(`Error al agregar producto: ${error.message}`);
         }
     }
 
     getCartById = async id => {
         try {
-            if(this.exists(this.archivo)){
-                let carts = await this.readFile(this.archivo)
+            if(this.exists(this.file)){
+                let carts = await this.readFile(this.file)
                 const cart = carts.find(item => item.id === id)
                 return cart ? cart : console.log('No product found')
         }
-        return console.log('The db not exist')
+        return console.log('La db no existe')
         } catch (error) {
             console.log(error);
         }
@@ -98,8 +89,8 @@ class CartManager {
 
     addToCart = async (cid, pid) => {
         try {
-            if(this.exists(this.archivo)) {
-                const carts = await this.readFile(this.archivo)
+            if(this.exists(this.file)) {
+                const carts = await this.readFile(this.file)
                 const cart = carts.find(item => item.id === cid)
                 console.log(cart);
             if(cart) {
@@ -112,7 +103,7 @@ class CartManager {
                 await this.writeFile(carts)
                 return cart
             }
-            throw new Error(`The cart with the id was not found: ${cid}`)
+            throw new Error(`No se encontró el carrito con el id: ${cid}`)
         }
         } catch (error) {
             console.log(error);

@@ -25,26 +25,21 @@ class ProductManager {
     }
     addProduct = async (product, imageName, imagePath) => {
         try {
-            console.log('que onda 2', product);
+            console.log('que onda??', product);
             let products = await this.getProducts()
             let newId
             let newCode = products.find(prod => prod.code === product.code)
-            //Chequeo que el campo "code" no se repita
-            if (newCode) return console.log('a product has already been entered with that code')
-            //Chequeo no se repitan las id
+            if (newCode) return console.log('ya se ingresó un producto con ese código')
             products.length === 0 ? newId = 1 : newId = products[products.length - 1 ].id + 1
-            //Chequeo que todos los campos esten completos
             if(Object.values(product).every(value => value)){
                 product.status === "true" ? product.status = true : product.status = false
-                // console.log(imageName);
-                // console.log(imagePath);
                 const thumbnail = [imageName]
                 const newProduct = {...product, thumbnail: thumbnail, id: newId}
                 products.push(newProduct)
                 await this.writeFile(products)
                 return this.getProducts()
             }
-            return console.log('All fields are required')
+            return console.log('Todos los campos son requeridos')
         } catch (error) {
             console.log(error);
         }
@@ -62,7 +57,7 @@ class ProductManager {
         try {
             let products = await this.getProducts()
             const product = products.find(prod => prod.id === id)
-            return product ? product : console.log('No product found')
+            return product ? product : console.log('Producto no encontrado')
         } catch (error) {
             console.log(error);
         }
@@ -72,7 +67,7 @@ class ProductManager {
             let products = await this.getProducts()
             const obj = products.filter(obj => obj.id !== id)
             await this.writeFile(obj);
-            return console.log('removed product');
+            return console.log('Producto eliminado');
         } catch (error) {
             console.log(error);
         }

@@ -17,14 +17,14 @@ app.use("/api", routers)
 app.post('/api/products', uploader.single('thumbnail'), (req, res)=>{
     res.status(200).send({
         status: 'success',
-        message: 'se subió correctamente'
+        message: 'se subió el archivo correctamente'
     })
 })
 
 const server = app.listen(PORT, () => {
-    console.log(`Listening app port ${server.address().port}`)
+    console.log(`Escuchando en el puerto ${server.address().port}`)
 });
 
 server.on('error', (error) => {
-    console.log('Error', error)
+    console.log('Error!', error)
 });

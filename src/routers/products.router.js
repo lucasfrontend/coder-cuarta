@@ -1,20 +1,9 @@
 const {Router} = require('express')
 const  {uploader} = require('../multer')
 const ProductManager = require('../controllers/productsManager')
-
 const router = Router()
 const productsList = new ProductManager('./products.json')
 const notFound = { status: 'error', error: "Product not found" }
-// const redirectHtml= res.redirect('http://localhost:8080/static')
-
-/* ok: 200
-    created: 201
-    no content: 204
-    bad request: 400
-    forbidden: 403
-    not found: 404
-    internal server error: 500
-    */
 
 router.get("/", async (req, res) => {
     try {
@@ -42,9 +31,8 @@ router.post("/", async (req, res) => {
         const product = req.body
         const addedProduct = await productsList.addProduct(product)
         !addedProduct
-        ? res.status(400).send({ error: "Could not add product" })
+        ? res.status(400).send({ error: "No se pudo agregar el producto" })
         : res.status(201).send({status:'success', payload: product})
-        // : res.status(201).send({status: 'success', payload: redirectHtml })
     } catch (error) {
         return {status: 'error', error}
     }
@@ -52,13 +40,13 @@ router.post("/", async (req, res) => {
 router.put("/:pid", async (req, res) => {
     try {
         const { pid } = req.params
-        const modification = req.body
+        const edit = req.body
         const modifiedProduct = await productsList.updateProduct(
         parseInt(pid),
-        modification
+        edit
         )
         !modifiedProduct
-        ? res.status(400).send({ error: `Could not modify product` })
+        ? res.status(400).send({ error: `No se pudo modificar el producto` })
         : res.status(200).send({ status:'success', payload: modifiedProduct })
     } catch (error) {
         return {notFound}
@@ -70,7 +58,7 @@ router.delete("/:pid", async (req, res) => {
         const removedProduct = await productsList.deleteById(parseInt(pid))
         !removedProduct
         ? res.status(404).send(notFound)
-        : res.status(200).send({ status:'success', message:'product removed' })
+        : res.status(200).send({ status:'success', message:'Producto eliminado' })
     } catch (error) {
         return {status: 'error', error}
     }
@@ -83,9 +71,8 @@ router.post('/formulario', uploader.single('thumbnail'), async (req, res) => {
         const imageName = req.file.filename
         const addedProduct = await productsList.addProduct(product, imagePath, imageName)
         !addedProduct
-        ? res.status(400).send({ error: "Could not add product" })
+        ? res.status(400).send({ error: "No se pudo agregar el producto" })
         : res.status(201).send({status:'success', payload: addedProduct})
-        // : res.status(201).send({status: 'success', payload: redirectHtml })
     } catch (error) {
         return {status: 'error', error}
     }
